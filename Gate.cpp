@@ -30,7 +30,7 @@ void GateConnector::initInput(const bool& hasEvent = true){
     double gcX = x;
     double gcY = getY2();
     if (!isOutput) {
-      if (gate->vertical) {        
+      if (getBit(gate->gatePackedFlags,0)) {//0-vertical        
         if (gate->getLineWidth() > 1) {
           gcY += y;
           gcX += gate->getLineWidth() / 2;
@@ -41,7 +41,7 @@ void GateConnector::initInput(const bool& hasEvent = true){
         }
       }
     } else {
-      if (gate->vertical) {
+      if (getBit(gate->gatePackedFlags,0)) {//0-vertical
         gcY = y;
         if (gate->getLineWidth() > 1) {
           gcX += gate->getLineWidth() / 2;
@@ -87,9 +87,8 @@ void GateConnector::addConnector(GateConnector* pGateConnector,bool addOnDestiny
 }
 
 void GateConnector::draw(const char* params[]) {
-
-  if (isOutput && gate->hasNot) {
-    if (gate->vertical) {
+  if (isOutput && getBit(gate->gatePackedFlags,8)) {//8-hasnot
+    if (getBit(gate->gatePackedFlags,0)) {//0-vertical
       m2 = m2 - (gate->notRadius * 2);
     } else {
       x = x + (gate->notRadius * 2);
@@ -106,7 +105,7 @@ void GateConnector::draw(const char* params[]) {
     double y1 = 0;
     double x2 = 0;
     double y2 = 0;
-    if (gate->vertical) {
+    if (getBit(gate->gatePackedFlags,0)) {//0-vertical
       x1 = x;
       y1 = y;
     } 
@@ -192,7 +191,7 @@ Gate::Gate(
   inputConnectorMargin(pInputConnectorMargin)  
 {
   //Serial.println(F("INIT Gate::Gate"));
-  vertical = pVertical;
+  setBit(gatePackedFlags,0,pVertical); //0-vertical
   color = pLineColor;
   if (pSize != DEFAULT_GATE_SIZE) {
     if (pWidth == DEFAULT_GATE_WIDTH) {
@@ -236,7 +235,7 @@ Gate::~Gate(){
 
 void Gate::initInputConnectors(){
   //Serial.println(F("INIT Gate::initInputConnectors"));
-  if (hasInputConnectors && inputConnectorCount > 0 && inputConnectors == nullptr) {
+  if (getBit(gatePackedFlags,1) && inputConnectorCount > 0 && inputConnectors == nullptr) {
     //Serial.println("ok1");
     inputConnectors = new DoubleLinkedList<GateConnector>("GateConnector");
     //Serial.println("ok2");
@@ -258,7 +257,7 @@ void Gate::initInputConnectors(){
     //Serial.println("ok5");
     for(int i = 0; i < inputConnectorCount; i++) { 
       //Serial.println("passing "+String(i));     
-      if (vertical) {
+      if (getBit(gatePackedFlags,0)) {//0-vertical
         if (lineWidth > 1) {
           connX = x+inputConnectorMargin+i*connSpace-lineWidth/2;
           connY = y;
@@ -299,9 +298,9 @@ void Gate::initInputConnectors(){
       inputConnectors->tail->data->gate = this;
       inputConnectors->tail->data->pos = i;
       inputConnectors->tail->data->color = color;
-      if (hasInputButtons) {
+      if (getBit(gatePackedFlags,5)) {
         inputConnectors->tail->data->initInput();
-        setBit(inputConnectors->tail->data->input->packedFlags,0,inputConnectors->tail->data->gate->visibleInputs);//0-visible
+        setBit(inputConnectors->tail->data->input->packedFlags,0,getBit(inputConnectors->tail->data->gate->gatePackedFlags,6));//0-visible
       }
     }
   }
@@ -309,12 +308,12 @@ void Gate::initInputConnectors(){
 }
 
 void Gate::initOutputConnector(){
-  if (inputConnectorsIsVisibles && outputConnector == nullptr) {
+  if (getBit(gatePackedFlags,2) && outputConnector == nullptr) {
     double connX = 0;    
     double connY = 0;    
     double connM1 = 0;    
     double connM2 = 0; 
-    if (vertical) {
+    if (getBit(gatePackedFlags,0)) {//0-vertical
       if (lineWidth > 1) {
         connX = x+m1/2-lineWidth/2;
         connY = y-m2-outputConnectorSize;
@@ -326,7 +325,7 @@ void Gate::initOutputConnector(){
         connM1 = connX;
         connM2 = y-m2;        
       }
-      if (hasNot) {
+      if (getBit(gatePackedFlags,8)) {//8-hasnot
         connM2 = connM2 - (notRadius * 2);
       }
     } else {
@@ -341,7 +340,7 @@ void Gate::initOutputConnector(){
         connM1 = connX+outputConnectorSize;
         connM2 = connY;
       }
-      if (hasNot) {
+      if (getBit(gatePackedFlags,8)) {//8-hasnot
         connM1 = connM1 - (notRadius * 2);
       }
     }
@@ -360,11 +359,11 @@ void Gate::initOutputConnector(){
     outputConnector->isOutput = true;
     outputConnector->color = color;
     outputConnector->gate = this;
-    if (hasInputButtons) {
+    if (getBit(gatePackedFlags,5)) {
       outputConnector->initInput(false);
     }    
     if (outputConnector->input != nullptr) {
-      setBit(outputConnector->input->packedFlags,0,outputConnector->gate->visibleOutput);//0-visible
+      setBit(outputConnector->input->packedFlags,0,getBit(outputConnector->gate->gatePackedFlags,7));//0-visible
       outputConnector->input->setState(outputState,false);//outputstate setted on constructor method, normaly true
     }    
   }
@@ -372,7 +371,7 @@ void Gate::initOutputConnector(){
 
 const GateConnector* Gate::findGateConnectorByPos(const int& pos) {
   GateConnector* result = nullptr;
-  if (hasInputConnectors && inputConnectorCount > 0 && inputConnectors != nullptr) {
+  if (getBit(gatePackedFlags,1) && inputConnectorCount > 0 && inputConnectors != nullptr) {
     Node<GateConnector>* current = inputConnectors->head;
     while (current != nullptr) {
       if (current->data != nullptr) {
@@ -389,7 +388,7 @@ const GateConnector* Gate::findGateConnectorByPos(const int& pos) {
 }
 
 void Gate::drawInputConnectors() {
-  if (hasInputConnectors && inputConnectorCount > 0 && inputConnectors != nullptr && inputConnectorsIsVisibles) {
+  if (getBit(gatePackedFlags,1) && inputConnectorCount > 0 && inputConnectors != nullptr && getBit(gatePackedFlags,2)) {
     Node<GateConnector>* current = inputConnectors->head;
     while (current != nullptr) {
       if (current->data != nullptr) {
@@ -402,17 +401,17 @@ void Gate::drawInputConnectors() {
 }
 
 void Gate::drawOutputConnector() {
-  if (inputConnectorsIsVisibles && outputConnector != nullptr && outputConnectorIsVisible) {
+  if (getBit(gatePackedFlags,2) && outputConnector != nullptr && getBit(gatePackedFlags,4)) {
     outputConnector->draw();
   }
 }
 
 void Gate::drawNot(){
   //Serial.println(F("INIT Gate::drawNot"));
-  if (hasNot) {
+  if (getBit(gatePackedFlags,8)) {//8-hasnot
     double cx = x+m1/2;
     double cy = y-m2-notRadius;
-    if (!vertical) {
+    if (!getBit(gatePackedFlags,0)) {//0-vertical
       cx = x+m2+notRadius;
       cy = y+m1/2;
     }
@@ -426,7 +425,7 @@ void Gate::drawBody() {
 
 void Gate::draw(const char* params[]) {
   //Serial.println(F("INIT Gate::draw"));
-  if (hasNot) {
+  if (getBit(gatePackedFlags,8)) {//8-hasnot
     notRadius = ((m2 + m2 * aspectRatio) / 2) * DEFAULT_GATE_NOT_RADIUS_PERC;
     if (notRadius > DEFAULT_GATE_MAX_NOT_RADIUS) {
       notRadius = DEFAULT_GATE_MAX_NOT_RADIUS;

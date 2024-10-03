@@ -18,7 +18,7 @@ NandGate::NandGate(
   AndGate(pParent,pX,pY,pSize,pInputConnectorCount,pVertical,pLineColor,pLineWidth,pAspectRatio,pBaseSizePerc,pInputConnectorSize,pWidth,pInputConnectorMargin) 
 {
   m2 = pSize;
-  hasNot = true;
+  setBit(gatePackedFlags,8,true);//8-hasNot
   outputState = true;
 };
 

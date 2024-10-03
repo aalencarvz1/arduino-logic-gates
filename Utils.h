@@ -30,4 +30,6 @@ DPoint calcularP3(
 // Função para definir um bit específico em um byte
 void setBit(uint8_t &byte, int position, bool value);
 bool getBit(uint8_t byte, int position);
+void setBit(uint16_t &byte, int position, bool value);
+bool getBit(uint16_t byte, int position);
 #endif // UTILS_H

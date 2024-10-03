@@ -22,7 +22,7 @@ NotGate::NotGate(
 {
   inputConnectorCount = 1;
   m2 = pSize;
-  hasNot = true;
+  setBit(gatePackedFlags,8,true);//8-hasNot
   outputState = true;
 };
 

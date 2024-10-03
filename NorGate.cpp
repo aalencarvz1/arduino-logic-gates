@@ -18,8 +18,8 @@ NorGate::NorGate(
   OrGate(pParent,pX,pY,pSize,pInputConnectorCount,pVertical,pLineColor,pLineWidth,pAspectRatio,pBaseSizePerc,pInputConnectorSize,pWidth,pInputConnectorMargin) 
 {
   m2 = pSize;
-  hasNot = true;
-  outputState = 10;
+  setBit(gatePackedFlags,8,true);//8-hasNot
+  outputState = 1;
 };
 
 

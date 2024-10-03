@@ -17,7 +17,7 @@ XorGate::XorGate(
 ) :
   OrGate(pParent,pX,pY,pSize,pInputConnectorCount,pVertical,pLineColor,pLineWidth,pAspectRatio,pBaseSizePerc,pInputConnectorSize,pWidth,pInputConnectorMargin) 
 {
-  exclusive = true;
+  setBit(gatePackedFlags,9,true);//9-exclusive
 };
 
 

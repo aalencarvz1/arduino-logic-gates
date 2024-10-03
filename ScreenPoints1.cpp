@@ -149,8 +149,8 @@ void ScreenPoints1::drawGate(char* gateName, double x, double y, double size, in
     pGateWidth
   );
   if (currentGate != nullptr) {
-    currentGate->hasInputButtons = true;
-    currentGate->visibleOutput = false;
+    setBit(currentGate->gatePackedFlags,5,true);//5-hasInputButtons
+    setBit(currentGate->gatePackedFlags,7,false);//7-visibleOutput;
     currentGate->draw();
   }
 

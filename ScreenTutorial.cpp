@@ -52,8 +52,8 @@ void ScreenTutorial::drawGateButton(
   if (pGateName != nullptr) {
     Gate* g = Gates::createGateByName(this,pGateName,pX+(col*(pX*2.0))-(pR*0.35),pY+hSupSpace+(lin*(pY*2.0))+(pR*0.35),pR*0.7);    
     if (g != nullptr) {
-      g->hasInputButtons = false;   
-      g->visibleInputs = false;
+      setBit(g->gatePackedFlags,5,false);//5-hasInputButtons
+      setBit(g->gatePackedFlags,6,false);//6-visibleInputs
       g->draw();
       children->remove(g);
     };  

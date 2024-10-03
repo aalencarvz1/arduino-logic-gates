@@ -25,7 +25,7 @@ BypassGate::BypassGate(
 };
 
 void BypassGate::drawBody() {
-  if (vertical) {
+  if (getBit(gatePackedFlags,0)) {//0-vertical
     if (lineWidth > 1) {
       TouchScreenController::tft.fillRect(x + m1 / 2 - lineWidth,y-m2,m1,m2,color); //base line
     } else {

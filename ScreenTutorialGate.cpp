@@ -49,7 +49,7 @@ void ScreenTutorialGate::drawGate(const char* gateName){
   currentGate = Gates::createGateByName(this,gateName,gateX,gateY,gateSize);
   if (currentGate != nullptr) {
 
-    currentGate->hasInputButtons = true;
+    setBit(currentGate->gatePackedFlags,5,true);//5-hasInputButtons
     currentGate->draw();
   }
 }
@@ -67,7 +67,7 @@ void ScreenTutorialGate::drawNavigationButtons(){
     buttonPrev->draw();
     auto f = [this](){
       this->drawPrevGate();
-      Serial.println("clicked x");
+      //Serial.println("clicked x");
     };
     buttonPrev->setOnClick(new LambdaCallback<decltype(f)>(f));
     buttonPrev->onClick->setArea(buttonPrev->x-buttonPrev->r1,buttonPrev->y-buttonPrev->r1,buttonPrev->r1);     

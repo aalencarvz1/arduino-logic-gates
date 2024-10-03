@@ -80,17 +80,24 @@ class Gate : public Container{
     double arcHeight = DEFAULT_GATE_SIZE * (1.0-DEFAULT_GATE_BASE_SIZE_PERC);
     double baseAdjust = 0.0;
 
-    bool vertical = DEFAULT_GATE_VERTICAL_DIRECTION;    
-    bool hasInputConnectors = true;
-    bool inputConnectorsIsVisibles = true;    
-    bool hasOutputConnector = true;
-    bool outputConnectorIsVisible = true;
-    bool hasInputButtons = true;
-    bool visibleInputs = true;
-    bool visibleOutput = true;
-    bool hasNot = false;
-    bool exclusive = false;            
+    /*
+    gatePackedFlags =
+      0 = bool vertical = DEFAULT_GATE_VERTICAL_DIRECTION; 
+      1 = bool hasInputConnectors = true;
+      2 = bool inputConnectorsIsVisibles = true;        
+      3 = bool hasOutputConnector = true;    
+      4 = bool outputConnectorIsVisible = true;    
+      5 = bool hasInputButtons = true; 
+      6 = bool visibleInputs = true;
+      7 - bool visibleOutput = true;
+      8 - bool hasNot = false;    
+      9 - bool exclusive = false;            
+    */
     bool outputState = false;
+    //                           positions   
+    //                           1111110000000000
+    //                           5432109876543210
+    uint16_t gatePackedFlags = 0b0000000011111111;
     
 
     double inputConnectorMargin;
@@ -117,16 +124,7 @@ class Gate : public Container{
     virtual ~Gate();
     virtual void initInputConnectors();
     virtual void initOutputConnector();
-    //virtual void setHasInputConnectors(const bool& pHasInputConnectors) {hasInputConnectors=pHasInputConnectors;};
-    //virtual void setHasInputButtons(const bool& pHasInputButtons) {hasInputButtons=pHasInputButtons;};
-    //virtual void setIsVisibleInputs(const bool& pIsVisibleInputs) {visibleInputs=pIsVisibleInputs;};
-    //virtual void setIsVisibleOutput(const bool& pIsVisibleOutput) {visibleOutput=pIsVisibleOutput;};
-    //virtual void setHasNot(const bool& pHasNot);
-    //virtual void setCurrentCircuitLevel(const int& pCurrentCircuitLevel) {currentCircuitLevel=pCurrentCircuitLevel;};
-    //virtual const bool& isVisibleInputs() const {return visibleInputs;};
-    //virtual const bool& isVertical() const {return vertical;};
     virtual const GateConnector* getOutputConnector() const {return outputConnector;};
-    //virtual const bool& getOutputState() const {return outputState;};
     virtual const double& getInputRadius() const {return inputRadius;};
     virtual const double& getLineWidth() const {return lineWidth;};
     virtual const int& getInputConnectorCount() const {return inputConnectorCount;};

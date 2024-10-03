@@ -17,7 +17,7 @@ void AndGate::drawBody() {
     baseAdjust = arcHeight - (m1 / 2.0);
   }   
     
-  if (vertical) {
+  if (getBit(gatePackedFlags,0)) {//0-vertical
     if (lineWidth > 1) {
       TouchScreenController::tft.fillRect(x,y-lineWidth,m1,lineWidth,color); //base line
       TouchScreenController::tft.fillRect(x,y-m2+arcHeight-baseAdjust,lineWidth,m2-arcHeight+baseAdjust,color); //left line
@@ -67,7 +67,7 @@ bool AndGate::calcOutputState() {
       if (current == current->next) break;
       current = current->next;  
     }
-    outputState = hasNot ? !outputState : outputState;
+    outputState = getBit(gatePackedFlags,8) ? !outputState : outputState; //8-hasNot
     if (outputConnector != nullptr) {
       if (outputConnector->input != nullptr) {
         outputConnector->input->setState(outputState); 

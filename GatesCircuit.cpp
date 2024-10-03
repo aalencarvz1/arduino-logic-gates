@@ -177,21 +177,21 @@ Gate* GatesCircuit::createGate(
     gates->add(lastCreatedGate);
     if (topGate == nullptr) {
       topGate = lastCreatedGate;                
-      lastCreatedGate->visibleOutput = topOutputVisible; //7-visibleOutput, 4-outputConnectorIsVisible        
+      setBit(lastCreatedGate->gatePackedFlags,7,topOutputVisible); //7-visibleOutput, 4-outputConnectorIsVisible        
     } else {
-      lastCreatedGate->visibleOutput = intermediaryOutputsVisible;//7-visibleOutput, 3-hasOutputConnector        
+      setBit(lastCreatedGate->gatePackedFlags,7,intermediaryOutputsVisible);//7-visibleOutput, 3-hasOutputConnector        
     };
     if (vertical) {
       lastCreatedGate->y = lastCreatedGate->y + lastCreatedGate->getInputConnectorSize() * 2;  //adjust top position, if vertical
     } else {
       //do implement
     }
-    lastCreatedGate->hasInputButtons = hasInputs; //5-hasInputButtons,1-hasInputConnectors
+    setBit(lastCreatedGate->gatePackedFlags,5,hasInputs);//5-hasInputButtons
     lastCreatedGate->currentCircuitLevel = currentCircuitLevel;
     if (lastCreatedGate->getCurrentCircuitLevel() == gateLevelCount-1) {
-      lastCreatedGate->visibleInputs = true; //6-visibleInputs
+      setBit(lastCreatedGate->gatePackedFlags,6,true); //6-visibleInputs
     } else {
-      lastCreatedGate->visibleInputs = intermediaryInputsVisible; //6-visibleInputs, 2-inputConnectorsIsVisibles
+      setBit(lastCreatedGate->gatePackedFlags,6,intermediaryInputsVisible); //6-visibleInputs
     }
     lastCreatedGate->initInputConnectors();
     lastCreatedGate->initOutputConnector();
@@ -212,7 +212,7 @@ void GatesCircuit::createGates(char* pGatesNames[]) {
   if (pGatesNames != nullptr) {
     Gate* g = nullptr;
     for(int i = 0; pGatesNames[i] != nullptr; i++) {
-      Serial.println("creating " + String(i) + " " + pGatesNames[i]);
+      //Serial.println("creating " + String(i) + " " + pGatesNames[i]);
       g = createGate(pGatesNames[i]);
       if (g != nullptr) {
         g->draw();

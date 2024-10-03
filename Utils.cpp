@@ -94,3 +94,16 @@ bool getBit(uint8_t byte, int position) {
     return (byte >> position) & 1;
 }
 
+void setBit(uint16_t &byte, int position, bool value) {
+    if (value) {
+        byte |= (1 << position);  // Define o bit para 1
+    } else {
+        byte &= ~(1 << position); // Limpa o bit para 0
+    }
+}
+
+// Função para obter o valor de um bit específico
+bool getBit(uint16_t byte, int position) {
+    return (byte >> position) & 1;
+}
+

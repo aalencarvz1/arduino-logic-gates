@@ -41,7 +41,7 @@ void OrGate::drawBody() {
 
   double baseArcHeight = m1 * DEFAULT_GATE_BASE_ARC_HEIGHT_ASPECT_RATIO;
   CircleInfo baseArc;
-  if (vertical) {  
+  if (getBit(gatePackedFlags,0)) {//0-vertical
 
     //draw curved base  
     baseArc = TouchScreenController::drawArcFromArrow(x,y,x+m1,y,baseArcHeight,color);
@@ -51,7 +51,7 @@ void OrGate::drawBody() {
       }
     }
 
-    if (exclusive) {
+    if (getBit(gatePackedFlags,9)) {//9-exclusive
       TouchScreenController::drawArcFromArrow(x,y+m2 * DEFAULT_GATE_EXCLUSIVE_SPACE_PERC,x+m1,y+m2 * DEFAULT_GATE_EXCLUSIVE_SPACE_PERC,baseArcHeight,color);
     }
 
@@ -119,7 +119,7 @@ void OrGate::drawBody() {
     }
 
     //draw exclusive curved bar
-    if (exclusive) {
+    if (getBit(gatePackedFlags,9)) {//9-exclusive
       baseArc = TouchScreenController::drawArcFromArrow(x-m2 * DEFAULT_GATE_EXCLUSIVE_SPACE_PERC,y,x-m2 * DEFAULT_GATE_EXCLUSIVE_SPACE_PERC,y+m1,baseArcHeight,color);
     }
 
@@ -193,7 +193,7 @@ bool OrGate::calcOutputState() {
       if (current->data != nullptr) {
         if (current->data->input != nullptr) {
           if (outputState) {
-            if (exclusive) {
+            if (getBit(gatePackedFlags,9)) {//9-exclusive
               if (current->data->input->getState()) {
                 outputState = false;
                 break;
@@ -209,7 +209,7 @@ bool OrGate::calcOutputState() {
       if (current == current->next) break;
       current = current->next;  
     }
-    outputState =  hasNot ? !outputState : outputState;
+    outputState =  getBit(gatePackedFlags,8) ? !outputState : outputState;//8-hasNot
     if (outputConnector != nullptr) {
       if (outputConnector->input != nullptr) {
         outputConnector->input->setState(outputState); 
