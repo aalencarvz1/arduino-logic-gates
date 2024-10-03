@@ -301,7 +301,7 @@ void Gate::initInputConnectors(){
       inputConnectors->tail->data->color = color;
       if (hasInputButtons) {
         inputConnectors->tail->data->initInput();
-        inputConnectors->tail->data->input->visible = inputConnectors->tail->data->gate->visibleInputs;
+        setBit(inputConnectors->tail->data->input->packedFlags,0,inputConnectors->tail->data->gate->visibleInputs);//0-visible
       }
     }
   }
@@ -364,7 +364,7 @@ void Gate::initOutputConnector(){
       outputConnector->initInput(false);
     }    
     if (outputConnector->input != nullptr) {
-      outputConnector->input->visible = outputConnector->gate->visibleOutput;
+      setBit(outputConnector->input->packedFlags,0,outputConnector->gate->visibleOutput);//0-visible
       outputConnector->input->setState(outputState,false);//outputstate setted on constructor method, normaly true
     }    
   }

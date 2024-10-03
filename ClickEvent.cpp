@@ -64,7 +64,7 @@ bool ClickEvent::checkClickEvent(const int& x,const int& y) {
           result = true;
         }
       } else {
-        if (component->isCirc) {
+        if (getBit(component->packedFlags,3)) { //3-isCircle
           if (abs(component->x - x) <= component->r1 && abs(component->y - y) <= component->r1) {
             result = true;
           }

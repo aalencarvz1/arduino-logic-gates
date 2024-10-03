@@ -12,9 +12,9 @@ void setup() {
   Serial.begin(9600);
   TouchScreenController::init(); 
   TouchScreenController::tft.fillScreen(TFT_BLACK);
-  //Screens::goTo(ScreenInitialMenu::SCREEN_ID);
+  Screens::goTo(ScreenInitialMenu::SCREEN_ID);
   //Screens::goTo(ScreenTutorialGate::SCREEN_ID);
-  Screens::goTo(ScreenPoints1::SCREEN_ID);
+  //Screens::goTo(ScreenPoints1::SCREEN_ID);
 }
 
 void loop() {

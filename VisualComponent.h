@@ -27,12 +27,18 @@ class VisualComponent : public virtual BaseSingleComponent{
     int m2 = 0;//measurement 2 [y2 for line and triangle, height for rectangle or triangle]            
   public:
     using BaseSingleComponent::BaseSingleComponent;
-    bool visible = true;
-    bool filled = true;        
-    bool isLn = true;
-    bool isCirc = false;
-    bool isRect = false;
-    bool isTriang = false;    
+    /*
+    packedFlags = 
+      0 = bool visible = true;
+      1 = bool filled = true;        
+      2 = bool isLn = true;
+      3 = bool isCirc = false;
+      4 = bool isRect = false;
+      5 = bool isTriang = false;  
+      6 free
+      7 free
+    */
+    uint8_t packedFlags = 0b00000111;  
     int x = 0;
     int y = 0;
     int r1 = 0; //circle radius or component radius abrangence

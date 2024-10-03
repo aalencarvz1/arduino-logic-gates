@@ -65,34 +65,34 @@ VisualComponent::VisualComponent(
 };
 
 void VisualComponent::clearTypeFlags() {
-  isLn =false;
-  isCirc =false;
-  isRect =false;
-  isTriang =false;
+  setBit(packedFlags,2,false);//line
+  setBit(packedFlags,3,false);//circle
+  setBit(packedFlags,4,false);//rect
+  setBit(packedFlags,5,false);//triangle
 };
 
 void VisualComponent::asLine() {
   clearTypeFlags();
-  isLn=true;
+  setBit(packedFlags,2,true);
 };
 void VisualComponent::asCircle() {
   clearTypeFlags();
-  isCirc=true;
+  setBit(packedFlags,3,true);
 };
 void VisualComponent::asRectangle() {
   clearTypeFlags();
-  isRect=true;
+  setBit(packedFlags,4,true);
 };
 void VisualComponent::asTriangle() {
   clearTypeFlags();
-  isTriang=true;
+  setBit(packedFlags,5,true);
 };
 
 void VisualComponent::setVisible(const bool& pVisible, const bool& pDraw) {
-  bool previousVisible = visible;
-  visible = pVisible;
+  bool previousVisible = getBit(packedFlags,0);
+  setBit(packedFlags,0,pVisible);
   if (pDraw) {
-    if (visible) {
+    if (getBit(packedFlags,0)) {
       if (!previousVisible) {
         draw();
       }
@@ -100,9 +100,9 @@ void VisualComponent::setVisible(const bool& pVisible, const bool& pDraw) {
       if (previousVisible) {
         int previousColor = color;
         color = DEFAULT_BACKGROUND_COLOR;
-        visible = !visible;
+        setBit(packedFlags,0,!getBit(packedFlags,0));
         draw();
-        visible = !visible;
+        setBit(packedFlags,0,!getBit(packedFlags,0));
         color = previousColor;
       }
     }
@@ -111,11 +111,11 @@ void VisualComponent::setVisible(const bool& pVisible, const bool& pDraw) {
 
 
 void VisualComponent::draw(const char* params[]){
-  if (visible) {//0-visible
-    if (isLn) {//2-line
+  if (getBit(packedFlags,0)) {//0-visible
+    if (getBit(packedFlags,2)) {//2-line
       TouchScreenController::tft.drawLine(x, y, m1, m2, color);
-    } else if (isRect) {//4-rectangle
-      if (filled) {//1-filled
+    } else if (getBit(packedFlags,4)) {//4-rectangle
+      if (getBit(packedFlags,1)) {//1-filled
         if (r2 != 0) {
           TouchScreenController::tft.fillRoundRect(x, y, m1, m2, r2, color);
         } else {
@@ -128,13 +128,13 @@ void VisualComponent::draw(const char* params[]){
           TouchScreenController::tft.drawRect(x, y, m1, m2, color);
         }
       }
-    } else if (isCirc) {//3-circle
-      if (filled) {//1-filled
+    } else if (getBit(packedFlags,3)) {//3-circle
+      if (getBit(packedFlags,1)) {//1-filled
         TouchScreenController::tft.fillCircle(x, y, r1, color);
       } else {
         TouchScreenController::tft.drawCircle(x, y, r1, color);
       }
-    } else if (isTriang) { //5-triangle   
+    } else if (getBit(packedFlags,5)) { //5-triangle   
       double x2 = 0;
       double y2 = 0;
       if (x == m1) {
@@ -159,7 +159,7 @@ void VisualComponent::draw(const char* params[]){
         y2 = p3.y;
         r1 = d / 2;
       }    
-      if (filled) {//1-filled
+      if (getBit(packedFlags,1)) {//1-filled
         TouchScreenController::tft.fillTriangle(x, y, m1,m2,x2,y2, color);
         if (r2 != 0) {
           //desenha os cantos arredondados

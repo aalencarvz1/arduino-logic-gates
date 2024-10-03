@@ -16,8 +16,7 @@ BaseScreen::BaseScreen(const char* pTitle = nullptr, const bool& pHasBack = true
   title(pTitle), 
   hasBack(pHasBack) 
 {
-  //filled = false;  
-  filled = false;
+  setBit(packedFlags,1,false);//1-filled
   asRectangle(); 
 };
 

@@ -72,7 +72,7 @@ void ScreenTutorialGate::drawNavigationButtons(){
     buttonPrev->setOnClick(new LambdaCallback<decltype(f)>(f));
     buttonPrev->onClick->setArea(buttonPrev->x-buttonPrev->r1,buttonPrev->y-buttonPrev->r1,buttonPrev->r1);     
   } else {
-    bool previousVisibleState = buttonPrev->visible;
+    bool previousVisibleState = getBit(buttonPrev->packedFlags,0);//0-visible;
     buttonPrev->setVisible(prevEnabled);          
     if (!previousVisibleState && prevEnabled) {
       buttonPrev->onClick->setArea(buttonPrev->x-buttonPrev->r1,buttonPrev->y-buttonPrev->r1,buttonPrev->r1);     
@@ -93,7 +93,7 @@ void ScreenTutorialGate::drawNavigationButtons(){
     buttonNext->setOnClick(new LambdaCallback<decltype(f)>(f));
     buttonNext->onClick->setArea(buttonNext->x+buttonNext->r1,buttonNext->y+buttonNext->r1,buttonNext->r1);     
   } else {
-    bool previousVisibleState = buttonNext->visible;
+    bool previousVisibleState = getBit(buttonNext->packedFlags,0);//0-visible;
     buttonNext->setVisible(nextEnabled);          
     if (!previousVisibleState && nextEnabled) {
       buttonNext->onClick->setArea(buttonNext->x+buttonNext->r1,buttonNext->y+buttonNext->r1,buttonNext->r1);     
